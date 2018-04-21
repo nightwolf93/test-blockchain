@@ -25,8 +25,8 @@ export default class Block {
     /**
      * Verify that the hash calculated is valid
      */
-    verifyHash() {
-        return sha256(this.index + this.previousHash + this.timestamp + nonce) == hash;
+    verifyHash(hash) {
+        return sha256(this.index + this.previousHash + this.timestamp + this.nonce) == hash;
     }
 
     /**
@@ -34,6 +34,24 @@ export default class Block {
      * @param {*} tx 
      */
     addTx(tx) {
+        logger.info("(TX) {" + tx.hash + "} " + tx.from + " -> (" + tx.amount + ") -> " + tx.to);
         this.txs.push(tx);
+    }
+
+    /**
+     * Return a serialized format for this block
+     */
+    serialize() {
+        return JSON.stringify({
+            index: this.index, 
+            previousHash: this.previousHash,
+            txs: this.txs.map((e) => { return e.serialize(); }),
+            metadata: this.metadata,
+            timestamp: this.timestamp,
+            nonce: this.nonce,
+            difficulty: this.difficulty,
+            hash: this.hash,
+            minedBy: this.minedBy
+        })
     }
 }

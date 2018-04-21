@@ -19,7 +19,7 @@ export default class Wallet {
      * Save the wallet to a file
      * @param {*} path 
      */
-    save(path) {
+    export(path) {
         const data = {
             version: this.version,
             publicKey: this.publicKey,
@@ -30,6 +30,13 @@ export default class Wallet {
 
         // Export keys to a file
         fs.writeFileSync(path + "/" + md5(this.publicKey) + ".wallet", JSON.stringify(data));
+    }
+
+    /**
+     * Save the wallet into the database
+     */
+    save() {
+        
     }
 
     /**

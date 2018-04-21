@@ -41,6 +41,18 @@ Object.keys(_mining).forEach(function (key) {
   });
 });
 
+var _chain = require("./chain");
+
+Object.keys(_chain).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _chain[key];
+    }
+  });
+});
+
 var _block = require("./block");
 
 var _block2 = _interopRequireDefault(_block);

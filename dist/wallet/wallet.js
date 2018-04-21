@@ -35,7 +35,7 @@ class Wallet {
      * Save the wallet to a file
      * @param {*} path 
      */
-    save(path) {
+    export(path) {
         const data = {
             version: this.version,
             publicKey: this.publicKey,
@@ -47,6 +47,11 @@ class Wallet {
         // Export keys to a file
         _fs2.default.writeFileSync(path + "/" + (0, _md2.default)(this.publicKey) + ".wallet", JSON.stringify(data));
     }
+
+    /**
+     * Save the wallet into the database
+     */
+    save() {}
 
     /**
      * Sign a message with the wallet, require the private key

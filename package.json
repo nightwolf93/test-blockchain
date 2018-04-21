@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src -d dist -w",
-    "dev": "node ./dist/index.js -c config.dev.yaml",
+    "dev": "node ./dist/index.js -p 3333",
     "cli": "node ./dist/cli.js -c config.dev.yaml"
   },
   "author": "Nicolas MARTINS <animebara93@gmail.com> (https://github.com/nightwolf93)",
@@ -22,7 +22,9 @@
     "babel-preset-latest-node": "^2.0.0-beta.2",
     "babel-preset-stage-0": "^6.24.1",
     "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
     "command-line-args": "^5.0.2",
+    "express": "^4.16.3",
     "js-yaml": "^3.11.0",
     "md5": "^2.2.1",
     "moment": "^2.22.1",

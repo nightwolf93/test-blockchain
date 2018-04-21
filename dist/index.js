@@ -12,22 +12,40 @@ var _wallet = require("./wallet");
 
 var _block = require("./block");
 
+var _tx = require("./tx");
+
+var _database = require("./database");
+
+var _p2p = require("./p2p");
+
+var _commandLineArgs = require("command-line-args");
+
+var _commandLineArgs2 = _interopRequireDefault(_commandLineArgs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Initialize the logger
-global.logger = _winston2.default.createLogger({
-    level: "debug",
-    format: _winston2.default.format.combine(_winston2.default.format.colorize({ all: true }), _winston2.default.format.simple()),
-    transports: [new _winston2.default.transports.Console()]
-});
+(async () => {
+    const options = (0, _commandLineArgs2.default)([{ name: 'port', alias: 'p', type: Number }]);
 
-let wallet = (0, _wallet.importWallet)("./wallets/849e2a00042ca342260e5d2529db43ab.wallet");
-const encryptedData = wallet.sign("test");
+    global.logger = _winston2.default.createLogger({
+        level: "debug",
+        format: _winston2.default.format.combine(_winston2.default.format.colorize({ all: true }), _winston2.default.format.simple()),
+        transports: [new _winston2.default.transports.Console()]
+    });
 
-let block = (0, _block.getGenesisBlock)();
-while (true) {
-    block.hash = (0, _block.mineBlock)(wallet, block);
-    console.log(block.hash + " - mined after " + block.nonce);
+    // Open the database
+    await (0, _database.connectToDatabase)();
 
-    block = (0, _block.getNextBlock)(block);
-}
+    // Load the blockchain
+    await (0, _block.loadBlockchain)();
+
+    // Serve http peer api server
+    await (0, _p2p.loadPeers)();
+    await (0, _p2p.serveHttp)(options.port);
+
+    let wallet = (0, _wallet.importWallet)("./wallets/849e2a00042ca342260e5d2529db43ab.wallet");
+
+    // Start mining
+    (0, _block.runMiningProcess)(wallet);
+})();
